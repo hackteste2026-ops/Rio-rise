@@ -22,10 +22,10 @@ jobs:
       - name: Configurar Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Instalar SDK
+      - name: Aceitar licenças e instalar SDK
         run: |
-          sdkmanager --install "platforms;android-35" "build-tools;35.0.0"
-          yes | sdkmanager --licenses
+          yes | sdkmanager --licenses || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -33,8 +33,7 @@ jobs:
           gradle-version: '8.7'
 
       - name: Extrair projeto
-        run: |
-          unzip -q RIO_RISE_Android_v1.3_testado.zip -d projeto
+        run: unzip -q RIO_RISE_Android_v1.3_testado.zip -d projeto
 
       - name: Compilar APK
         run: gradle -p projeto assembleDebug
@@ -44,3 +43,4 @@ jobs:
         with:
           name: RIO-RISE-APK
           path: projeto/app/build/outputs/apk/debug/app-debug.apk
+
